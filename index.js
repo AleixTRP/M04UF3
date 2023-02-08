@@ -28,7 +28,7 @@ http.createServer(function (request, response)
 						if(err) 
 						{ 
 							console.error(err);
-							return,
+							return;
 
 							}
 
