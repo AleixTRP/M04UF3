@@ -1,19 +1,35 @@
-const http = require('https');
+const http = require('http');
 const fs = require('fs');
-
 
 
 
 function send_index(response)
 {
- fs.readFile("index.html", function(err,data)
+	
+	fs.readFile("indexs.html", function(err, data){
+			if (err){
+				
+				console.error(err);
+						return;
+											}
+        response.writeHead(200, {"Content-Type":"text/html"});
+					
+					response.write(data);
+
+					response.end();
+});
+}
+
+function send_player(response)
+{
+ fs.readFile("indexs.html", function(err,data)
  {
- if(err)
- {		
- console.error(err);
- return;
- }				  
- response.writeHead(200, {"Content-Type": "text/html"})
+ 		if(err)
+ 	{		
+ 		console.error(err);
+ 	return;
+ 	}				  
+ response.writeHead(200, {"Content-Type":"image/png"})
  response.write(data);
 						
 response.end();
@@ -31,7 +47,7 @@ http.createServer(function (request, response)
 		switch (url[1])
 		{
 			case "player.png":
-				send_index(response);
+				send_player(response);
 
 				break;
 
@@ -39,4 +55,4 @@ http.createServer(function (request, response)
 						send_index(response);
 				}
 
-				}).listen(6969);
+}).listen(6969);
