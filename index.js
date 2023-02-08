@@ -22,7 +22,7 @@ function send_index(response)
 
 function send_player(response)
 {
- fs.readFile("indexs.html", function(err,data)
+ fs.readFile("player.png", function(err,data)
  {
  		if(err)
  	{		
