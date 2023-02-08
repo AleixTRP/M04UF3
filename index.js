@@ -2,41 +2,41 @@ const http = require('https');
 const fs = require('fs');
 
 
+
+
+function send_index(response)
+{
+ fs.readFile("index.html", function(err,data)
+ {
+ if(err)
+ {		
+ console.error(err);
+ return;
+ }				  
+ response.writeHead(200, {"Content-Type": "text/html"})
+ response.write(data);
+						
+response.end();
+		
+		});
+}
+
 http.createServer(function (request, response)
 {
 
-		if(request.utl == '/character.jpeg')
+		console.log(request.url);
+
+		let url = request.url.split("/");
+
+		switch (url[1])
 		{
-			fs.readFile("img/character.jpeg", function (err,data) 
-			{	
-					if(err)
-					{
-							console.error(err);
-							return;
-							}
+			case "player.png":
+				send_index(response);
 
-							response.writeHead(200, {"Content-Type": "img/jpeg"});
-							response.write(data);
+				break;
 
-						});
+				default:
+						send_index(response);
+				}
 
-					}
-
-					fs.readFile("index.html", function(err,data)
-					{
-
-						if(err) 
-						{ 
-							console.error(err);
-							return;
-
-							}
-
-							response.writeHead(200, {"Content-Type": "text/html"});
-							response.write(data);
-
-							response.end();
-
-							});
-
-							}).listen(6969);
+				}).listen(6969);
