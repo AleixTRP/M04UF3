@@ -22,7 +22,8 @@ const game = new Phaser.Game(config);
 let player;
 let enemy = [];
 let enemy_padding = 128;
-let enemy_pos = [
+let enemies_pos = [
+	
 	{x:	enemy_padding, y: enemy_padding},
 	{x: config.width/2, y:enemy_padding},
 	{x:	config.width - enemy_padding, y: enemy_padding},
@@ -35,6 +36,7 @@ let enemy_pos = [
 	 
 	 {x:enemy_padding, y: config.height/2}
  ];
+
 let player_speed = 2;
 
 let key_left;
@@ -50,14 +52,14 @@ function precarga()
 	this.load.image("player-img", "player.png");
 
 
-
+}
 function crear()
 {
 	player = this.add.image(config.width/2,config.height/2, "player-img");
 
-	for(let i = 0,  i< enemies_pos.length; i++;)
+	for(let i = 0 ; i < enemies_pos.length; i++)
 	{
-		enemies.push(this.add.image(enemies_pos[i].x, enemies_pos[i].y, "player_img"));
+		enemy.push(this.add.image(enemies_pos[i].x, enemies_pos[i].y, "player-img"));
 		}
 
 
