@@ -40,19 +40,16 @@ response.end();
 http.createServer(function (request, response)
 {
 
-		console.log(request.url);
+let url = request.url.split("/");
+let fileName = url[1];
 
-		let url = request.url.split("/");
-
-		switch (url[1])
-		{
-			case "player.png":
-				send_player(response);
-
-				break;
-
-				default:
-						send_index(response);
-				}
+ 
+ if (fileName.endsWith(".png")) 
+ {
+   send_image(response, fileName)						 
+} else 
+	{
+   send_index(response);
+}
 
 }).listen(6969);
