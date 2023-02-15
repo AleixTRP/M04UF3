@@ -1,12 +1,14 @@
 const http = require("http");
-const fs = require("fs");
+//const fs = require("fs");
+const files_static = require("node-static");
 
+let files = new files_static.Server("./public");
 
-
+/*
 function send_index(response)
 {
 	
-	fs.readFile("indexs.html", function(err, data){
+	fs.readFile("index.html", function(err, data){
 			if (err){
 				
 				console.error(err);
@@ -36,23 +38,14 @@ response.end();
 		
 		});
 }
+*/
 
-http.createServer(function (request, response)
+http.createServer(function(request, response)
 {
-
-		console.log(request.url);
-
-		let url = request.url.split("/");
-
-		switch (url[1])
+	request.addListener('end',function()
 		{
-			case "player.png":
-				send_player(response);
+			files.serve(request,response);
 
-				break;
-
-				default:
-						send_index(response);
-				}
+		}).resume();
 
 }).listen(6969);
