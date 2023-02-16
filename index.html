@@ -16,12 +16,12 @@ const config = {
 	height: 540,
 	physics:
 	{
-		default:'arcade',
-		arcade:
-		{
-			debug: true
-			}
-		},
+	physics: {
+				default: 'arcade',
+			arcade: {
+		debug: true
+		}
+ },
 scene:{
 	preload: precarga,
 	create: crear,
@@ -60,45 +60,69 @@ let key_up;
 let key_down;
 
 function precarga()
-{
-<<<<<<< HEAD
-	this.load.image("player-img", "player.png");
-  
-=======
-	this.load.image("player-img", "EduardoSalazar.jpg");
->>>>>>> 9637d22914a60f24da30d45306c132e1e7ebe163
 
+this.load.image("player-img", "imgs/player.png");
+				
+this.load.image("bg-img", "imgs/background.png");
+								
+for (let i = 1; i <= enemies_max; i++) {
+	
+	this.load.image("enemy-" + i, "imgs/enemy" + i + ".png");
+	}
+		this.load.image("metal-bat", "imgs/bat_metal.png");
 }
+
+
+
+
+
+
 function crear()
 {
-	player = this.add.image(config.width/2,config.height/2, "player-img");
-	sword  = this.add.image(config.width/2,conifg.height/2, "player-img");
+	let bg = this.add.image(config.width / 2, config.height / 2, "bg-img");
 
-	this.physics.add.existing(player,false);
-	player.body.setCollideWorldBounds (true);
+	player = this.add.image(config.width / 2, config.height / 2, "player-img");
+									
+	this.physics.add.existing(player, false);
+	player.body.setCollideWorldBounds(true);
+																					
+	player_weapon = this.add.image(config.width / 2 - weapon_offset, config.height / 2, "metal-bat");
 
+	player_weapon.visible = false;
 
+	for (let i = 0; i < enemies_pos.length; i++) {
 
-	for(let i = 0 ; i < enemies_pos.length; i++)
-	{
-		enemy.push(this.add.image(enemies_pos[i].x, enemies_pos[i].y, "player-img"));
-		
-		this.physics.add.existing(enemy[i], false);
-		enemy[i].body.setCollideWorldBounds(true);
-}
+	let enemyImage = "enemy-" + Math.floor(Math.random() * enemies_max + 1);
+	
+	let enemy = this.add.sprite(enemies_pos[i].x, enemies_pos[i].y , enemyImage);
+
+	this.physics.add.existing(enemy, false);
+
+	enemy.body.setCollideWorldBounds(true);
+
+	enemies.push(enemy);
+
+	}
 
 	this.physics.add.collider(player,enemy);
-<<<<<<< HEAD
-	this.physics.add.collider(enemy,enemy);
 
-=======
-  this.physics.add.collider(enemy,enemy);
->>>>>>> 9637d22914a60f24da30d45306c132e1e7ebe163
+	this.physics.add.collider(enemy,enemy);
 
 	key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
 	key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 	key_up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 	key_down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+}
+
+setInterval(() => {
+					
+	player_weapon.visible = true;
+		
+		setTimeout(() => {
+			
+			player_weapon.visible = false;
+			}, 400);
+	}, 2000);
 }
 
 function actualiza()
