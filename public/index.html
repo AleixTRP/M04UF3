@@ -30,6 +30,7 @@ scene:{
 };
 const game = new Phaser.Game(config);
 
+
 let player;
 let weapon;
 let enemy = [];
@@ -49,6 +50,10 @@ let enemies_pos = [
 	 
 	 {x:enemy_padding, y: config.height/2}
  ];
+
+let enemies_max = 28;
+
+let bat_img = 48;
 
 let player_speed = 2;
 
@@ -74,12 +79,15 @@ function precarga()
 function crear()
 {
 	let bg = this.add.image(config.width/2,config.height/2,"background.png");
-		player = this.add.image(config.width/2,config.height/2, "player-img");
-	
+	player = this.add.image(config.width/2,config.height/2, "player-img");
+	bat = this.load.image("metal-bat", "imgs/bat_metal.png");
 
 
 	this.physics.add.existing(player,false);
 	player.body.setCollideWorldBounds (true);
+
+
+	bat_player= this.add.image(config.width / 2 - weapon_offset, config.height / 2, "metal-bat");
 
 	for (let i = 0; i < enemies_pos.length;i++)
 	{
@@ -131,24 +139,31 @@ function actualiza()
 
 
 	if(key_left.isDown){
-		player.x -= player_speed;
+		player.x -= player_speed;i
+		bat_player.x = player.x - bat_img:;
 	}
 	else if(key_right.isDown){
 
 		player.x += player_speed;
+		bat_player.x = player.x - bat_img:;
 	}
 
 	if(key_up.isDown){
 		player.y -= player_speed;
+		bat_player.y = player.y - bat_img:;
 	}
 	else if (key_down.isDown){
 		player.y += player_speed;
+		bat_player.y = player.y - bat_img:;
 		
 		}
 
 	for (let i = 0; i < enemies_pos.length; i++)
 	{
 		this.physics.moveToObject(enemy[i],player, 50)
+		this.physics.collide(player, bat_player);
+		this.physics.collide(player, enemies);
+		this.physics.collide(enemies, bat_player);
 	}
 }
 </script>

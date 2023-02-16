@@ -1,8 +1,8 @@
 const http = require("http");
 //const fs = require("fs");
-const files_static = require("node-static");
+const filesStatic = require("node-static");
 
-let files = new files_static.Server("./public");
+let files = new filesStatic.Server("./public");
 
 /*
 function send_index(response)
@@ -42,14 +42,13 @@ response.end();
 
 http.createServer(function(request, response)
 {
-<<<<<<< HEAD
+
 	request.addListener('end',function()
 		{
 			files.serve(request,response);
 
 		}).resume();
-=======
-
+/*
 let url = request.url.split("/");
 let fileName = url[1];
 
@@ -61,6 +60,6 @@ let fileName = url[1];
 	{
    send_index(response);
 }
->>>>>>> 9637d22914a60f24da30d45306c132e1e7ebe163
+*/
 
 }).listen(6969);
