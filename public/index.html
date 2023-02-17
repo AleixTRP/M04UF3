@@ -51,6 +51,9 @@ let enemies_pos = [
 
 let player_speed = 8;
 
+let score = 0;
+let score_text;
+
 let key_left;
 let key_right;
 let key_up;
@@ -66,7 +69,7 @@ function precarga ()
 		this.load.image("enemy"+i, "imgs/enemy"+i+".png");
 	}
 
-	this.load.image("bate", "imgs/bate.png");
+	this.load.image("bate", "imgs/bat_metal.png");
 }
 
 function crear ()
@@ -105,6 +108,8 @@ function crear ()
 			weapon.visible = false;
 		}, 400);
 	}, 2000);
+	
+	score_text = this.add.text(16,16, '0', {font:'600 64px Arial'});
 }
 
 function actualiza ()
@@ -135,13 +140,18 @@ function actualiza ()
 	  }
 
 	for (let i = 0; i < enemies_pos.length; i++){
-		this.physics.moveToObject(enemies[i], player, 50)
-		this.physics.add.collider(player, enemies);
-		this.physics.add.collider(enemies[i], enemies);
+		this.physics.moveToObject(enemies[i], player, 50);
+		this.physics.collide(player, enemies);
+		this.physics.collide(enemies[i], enemies);
 
 	
-			if (this.physics.add.collider(weapon, enemies[i])) {
-				console.log("Has golpeado al enemigo " +i);
+			if (this.physics.collide(weapon, enemies[i])) {
+				enemies[i].visible = false;
+
+				score ++;
+
+				score_text.text = score; 
+				
 		}
 	}
 }
