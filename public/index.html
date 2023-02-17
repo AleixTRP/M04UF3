@@ -1,171 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ENTI Surviviors</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser-arcade-physics.min.js" integrity="sha512-3ggJ43PNjH5aQCsd8/CBKa18RPMR8OaQX0JvHCZ4iJO/2Jk9mLdVZYVGFVUJmIoKeoF9Hg1pVgmROv9+xpgQlQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
-</script>
-
+<title>ENTI Survivors</title>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser-arcade-physics.min.js" integrity="sha512-3ggJ43PNjH5aQCsd8/CBKa18RPMR8OaQX0JvHCZ4iJO/2Jk9mLdVZYVGFVUJmIoKeoF9Hg1pVgmROv9+xpgQlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <body>
-<h1>ENTI SURVIVORS</h1>
+<h1>ENTI Survivors</h1>
 <script>
 
 const config = {
 	width: 960,
 	height: 540,
-	physics:
-	{
+	physics:{
 		default:'arcade',
-		arcade:
-		{
+		arcade: {
 			debug: true
-			}
-		},
-scene:{
-	preload: precarga,
-	create: crear,
-	update: actualiza
-	}
+		}
+	},
+	scene:{
+		preload:precarga,
+		create: crear,
+		update: actualiza
+		}
 };
+
 const game = new Phaser.Game(config);
 
-
 let player;
+
 let weapon;
-let enemy = [];
-let enemies_max = 28;
+
+let enemies_max = 27;
+let enemies = [];
 let enemy_padding = 128;
 let enemies_pos = [
 	
-	{x:	enemy_padding, y: enemy_padding},
-	{x: config.width/2, y:enemy_padding},
-	{x:	config.width - enemy_padding, y: enemy_padding},
+	{x: enemy_padding, y: enemy_padding},
+	{x: config.width/2, y:  enemy_padding},
+	{x: config.width - enemy_padding, y: enemy_padding},
 
-	{x:	config.width - enemy_padding, y: config.height/2},
+	{x: config.width - enemy_padding, y: config.height/2},
+	
+	{x: config.width - enemy_padding, y: config.height - enemy_padding},
+	{x: config.width/2, y: config.height - enemy_padding},
+	{x: enemy_padding, y: config.height - enemy_padding},
 
-	 {x: config.width - enemy_padding, y: config.height - enemy_padding},
-	 {x: config.width/2, y:config.height - enemy_padding},
-	 {x: enemy_padding ,y:config.height - enemy_padding},
-	 
-	 {x:enemy_padding, y: config.height/2}
- ];
+	{x:enemy_padding, y: config.height/2}
 
-let enemies_max = 28;
+];
 
-let bat_img = 48;
-
-let player_speed = 2;
+let player_speed = 8;
 
 let key_left;
-
 let key_right;
-
 let key_up;
-
 let key_down;
 
-function precarga()
+
+function precarga ()
 {
+	this.load.image("bg-img", "imgs/background.png");
 	this.load.image("player-img", "imgs/player.png");
-	this.load.image("bg-img", "imgs/background.png");	
-	
-	for (let i = 1; i <= enemies_max;i++)
-	{
+
+	for (let i = 1; i <= enemies_max; i++){
 		this.load.image("enemy"+i, "imgs/enemy"+i+".png");
+	}
 
-  }
+	this.load.image("bate", "imgs/bate.png");
 }
-function crear()
+
+function crear ()
 {
-	let bg = this.add.image(config.width/2,config.height/2,"background.png");
-	player = this.add.image(config.width/2,config.height/2, "player-img");
-	bat = this.load.image("metal-bat", "imgs/bat_metal.png");
+
+	let bg = this.add.image(config.width/2, config.height/2, "bg-img");
+ 	player = this.add.image(config.width/2, config.height/2, "player-img");
+	
+	this.physics.add.existing(player, false);
+	player.body.setCollideWorldBounds(true);
+
+	weapon = this.add.image(config.width/2+48, config.height/2, "bate");
+	this.physics.add.existing(weapon, false);
+
+	weapon.visible = false;
 
 
-	this.physics.add.existing(player,false);
-	player.body.setCollideWorldBounds (true);
+	for (let i = 0; i < enemies_pos.length; i++){
+		let enemy = "enemy"+Math.floor(Math.random()*enemies_max+1);
 
+		let e = this.add.image(enemies_pos[i].x, enemies_pos[i].y, enemy)
+		enemies.push(e);
 
-	bat_player= this.add.image(config.width / 2 - bat_img, config.height / 2, "metal-bat");
-
-	for (let i = 0; i < enemies_pos.length;i++)
-	{
-		let enemies = "enemy"+Math.floor(Math.random()*enemies_max+1);
-
-		let e = this.add.image(enemies_pos[i].x, enemies_pos[i].y, enemies);
-				enemies.push(e);
-
-					this.physics.add.existing(e,false);
-					e.body.setColliderWorldBounds(true);
-
-}
-
-
-	for(let i = 0 ; i < enemies_pos.length; i++)
-	{
-		enemy.push(this.add.image(enemies_pos[i].x, enemies_pos[i].y, "player-img"));
-		
-		this.physics.add.existing(enemy[i], false);
-		enemy[i].body.setCollideWorldBounds(true);
-}
-
-	this.physics.add.collider(player,enemy);
-	this.physics.add.collider(enemy,enemy);
-
-
+		this.physics.add.existing(e, false);
+		e.body.setCollideWorldBounds(true);
+	 
+ }
 	key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
 	key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 	key_up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 	key_down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 
-
-	setInterval(function()
-	{
+	setInterval(function(){
 		weapon.visible = true;
-		
-		setTimeout(function()
-		{
+		setTimeout(function(){
 			weapon.visible = false;
-			}, 400);
-
+		}, 400);
 	}, 2000);
-
 }
 
-
-function actualiza()
+function actualiza ()
 {
 
+	if (key_left.isDown){
+		player.x -= player_speed;
+		weapon.x = player.x - 48;
+		weapon.y = player.y;
+  	}
 
-	if(key_left.isDown){
-		player.x -= player_speed;i
-		bat_player.x = player.x - bat_img:;
-	}
-	else if(key_right.isDown){
-
+	else if (key_right.isDown){
 		player.x += player_speed;
-		bat_player.x = player.x - bat_img:;
-	}
+		weapon.x = player.x + 48;
+		weapon.y = player.y;
+  	}
 
-	if(key_up.isDown){
+	if (key_up.isDown){
 		player.y -= player_speed;
-		bat_player.y = player.y - bat_img:;
-	}
+		weapon.y = player.y - 48;
+		weapon.x = player.x;
+	  }
+
 	else if (key_down.isDown){
 		player.y += player_speed;
-		bat_player.y = player.y - bat_img:;
-		
-		}
+		weapon.y = player.y + 48;
+		weapon.x = player.x;
+	  }
 
-	for (let i = 0; i < enemies_pos.length; i++)
-	{
-		this.physics.moveToObject(enemy[i],player, 50)
-		this.physics.collide(player, bat_player);
-		this.physics.collide(player, enemies);
-		this.physics.collide(enemies, bat_player);
+	for (let i = 0; i < enemies_pos.length; i++){
+		this.physics.moveToObject(enemies[i], player, 50)
+		this.physics.add.collider(player, enemies);
+		this.physics.add.collider(enemies[i], enemies);
+
+	
+			if (this.physics.add.collider(weapon, enemies[i])) {
+				console.log("Has golpeado al enemigo " +i);
+		}
 	}
 }
+
 </script>
 </body>
 </html>
