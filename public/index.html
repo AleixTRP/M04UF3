@@ -6,6 +6,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser-arcade-physics.min.js" integrity="sha512-3ggJ43PNjH5aQCsd8/CBKa18RPMR8OaQX0JvHCZ4iJO/2Jk9mLdVZYVGFVUJmIoKeoF9Hg1pVgmROv9+xpgQlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <body>
 <h1>ENTI Survivors</h1>
+<p>Seleccione la dificultad:</p>
+<input type="radio" id="ez" name="difficulty" value="ez" checked/>
+<label for="ez">Facil</label>
+<input type="radio" id="mid" name="difficulty" value="mid"/>
+<label for="mid">Normal</label>
+<input type="radio" id="hard" name="difficulty" value="hard"/>
+<label for="hard">Dificil</label>
+
+<br>
+
+<p>tiempo: </p>
+<button type="button" id="inc" onclick="incremenet(); return false;">Increment</button>
+<button type="button" id="dec" onclick="decrement()return false;">Decrement</button>
+<br>
+<button type="button" id="play" onclick="play(); return false;">Jugar</button>
 <script>
 
 const config = {
@@ -27,8 +42,22 @@ const config = {
 const game = new Phaser.Game(config);
 
 let player;
-
 let weapon;
+let player_speed = 8;
+
+let score = 0;
+let score_text;
+let timer = 0;
+let timer_text;
+let time_type = "increment";
+
+let difficulty;
+
+let key_left;
+let key_right;
+let key_up;
+let key_down;
+
 
 let enemies_max = 27;
 let enemies = [];
@@ -49,15 +78,50 @@ let enemies_pos = [
 
 ];
 
-let player_speed = 8;
+function increment(){
+	time_type = "increment";
+}
 
-let score = 0;
-let score_text;
+function decrement(){
+	time_type = "decrement";
+}
 
-let key_left;
-let key_right;
-let key_up;
-let key_down;
+function Difficult(){
+	var dif = document.getElementsByName("difficulty");
+	var obtDif;
+
+	for(var i = 0; i < 3; i++){
+		if(dif[i].checked){
+			obtDif = v[i];
+			break;
+		}
+	}
+	return obtDif;
+}
+
+function play(){
+	difficulty = obtainDif();
+	
+	if(time_type === "increment"){
+		timer = 0;
+		setInterval(() => {
+			timer++;
+			timer_text.setText("Time: " + timer + "s");
+
+		},1000);
+		}
+	if (time_type === "decrement"){
+		timer = 300;
+
+		setInterval(() => {
+			timer--;
+			timer_text.setText("Time: " + timer + "s");
+
+		},1000);
+	}
+
+	
+}
 
 
 function precarga ()
@@ -111,16 +175,45 @@ function crear ()
 		}, 400);
 	}, 2000);
 	
-	score_text = this.add.text(16,16, '0', {font:'600 64px Arial'});
+	score_text = this.add.text(16,16,'0',{font:'600 80px Arial'});
+	timer_text = this.add.text(3 * config.width / 4, 24, "Time: 0", {font:'600 40px Arial'});
+
 }
-
 let last_dir = "L";
-
 let last_x = config.width/2;
 let last_y = config.height/2;
 
 function actualiza ()
 {
+
+if( timer % 5 === 0){
+
+		switch(obtDif){
+			case"easy":
+				for(let i = 0; i < enemies_pos.length; i++){
+					let enemy = "enemy"+Math.floor(Math.random()*enemies_max+1);
+					let e = this.add.image(enemies_pos[i].x, enemies_pos[i].y, enemy)
+					this.physics.add.existing(enemies[i], false);
+					enemies.push(e);
+		
+				}	
+			case"medium":
+				for(let i = 0; i < enemies_pos.length; i++){
+					let enemy = "enemy"+Math.floor(Math.random()*enemies_max+1);
+					let e = this.add.image(enemies_pos[i].x, enemies_pos[i].y, enemy)
+					this.physics.add.existing(enemies[i], false);
+					enemies.push(e);
+		
+				}
+			case"hard":
+				for(let i = 0; i < enemies_pos.length; i++){
+					let enemy = "enemy"+Math.floor(Math.random()*enemies_max+1);
+					let e = this.add.image(enemies_pos[i].x, enemies_pos[i].y, enemy)
+					this.physics.add.existing(enemies[i], false);
+					enemies.push(e);
+		
+				}
+		}
 
 	if (key_left.isDown)
 		{
