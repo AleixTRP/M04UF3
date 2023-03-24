@@ -10,7 +10,7 @@
 
 <p>Dificulties:</p>
 <input type="radio" id="easy" name="difficulty" value="easy" checked/>
-<label for="esay">Easy</label>
+<label for="easy">Easy</label>
 <input type="radio" id="medium" name="difficulty" value="medium"/>
 <label for="medium">Medium</label>
 <input type="radio" id="hard" name="difficulty" value="hard"/>
@@ -74,7 +74,7 @@ let enemies_pos = [
 {x:enemy_padding, y: config.height/2}
 ];
 
-function increment(){
+function incremenet(){
 	time_type = "increment";
 	}
 
@@ -88,14 +88,14 @@ function Difficult(){
 
 for(var i = 0; i < 3; i++){
 	if(dif[i].checked){
-		obtDif = v[i];
+		obtDif = dif[i].value;
 		break;
 		}
 	}
 	return obtDif;
 }
 function play(){
-	difficulty = obtainDif();
+	difficulty = Difficult();
 		
 	if(time_type === "increment"){
 			
